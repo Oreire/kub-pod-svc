@@ -1,0 +1,34 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up KUBECONFIG environment variable
+      run: |
+        # Ensure KUBECONFIG is set to the appropriate file
+        export KUBECONFIG=$HOME/.kube/config
+        echo "KUBECONFIG environment variable is set to: $KUBECONFIG"
+
+    - name: Verify kubectl installation
+      run: |
+        # Check if kubectl is available
+        which kubectl || echo "kubectl is not installed on the runner"
+        kubectl version --client || echo "Ensure kubectl is correctly configured"
+
+    - name: Apply Kubernetes manifests
+      run: |
+        # Applying manifests to the Kubernetes cluster
+        cd kube
+        kubectl apply -f nginx.yaml
+        kubectl apply -f prometheus.yaml
+        kubectl apply -f grafana.yaml
