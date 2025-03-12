@@ -29,6 +29,6 @@ jobs:
       run: |
         # Applying manifests to the Kubernetes cluster
         cd kube
-        kubectl apply -f nginxpod.yaml                       # --validate=false || echo "Failed to apply nginxpod.yaml"
-        kubectl apply -f prometheuspod.yaml                  # --validate=false || echo "Failed to apply prometheuspod.yaml"
-        kubectl apply -f grafanapod.yaml                     # --validate=false || echo "Failed to apply grafanapod.yaml"
+        kubectl apply -f nginxpod.yaml   --validate=false || echo "Failed to apply nginxpod.yaml"
+        kubectl apply -f prometheuspod.yaml --validate=false || echo "Failed to apply prometheuspod.yaml"
+        kubectl apply -f grafanapod.yaml    --validate=false || echo "Failed to apply grafanapod.yaml"
