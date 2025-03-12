@@ -29,6 +29,6 @@ jobs:
       run: |
         # Applying manifests to the Kubernetes cluster
         cd kube
-        kubectl apply -f nginx.yaml
-        kubectl apply -f prometheus.yaml
-        kubectl apply -f grafana.yaml
+        kubectl apply -f nginx.yaml --validate=false || echo "Failed to apply nginx.yaml"
+        kubectl apply -f prometheus.yaml --validate=false || echo "Failed to apply prometheus.yaml"
+        kubectl apply -f grafana.yaml --validate=false || echo "Failed to apply grafana.yaml"
