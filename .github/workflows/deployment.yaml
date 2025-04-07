@@ -30,7 +30,6 @@ jobs:
       run: |
         # Applying manifests to the Kubernetes cluster
         cd kube
-        export KUBECONFIG=/home/ubuntu/kubeconfig  
         kubectl config view
         kubectl get nodes  # To verify connection
         kubectl apply -f nginxpod.yaml
