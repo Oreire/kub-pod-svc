@@ -16,8 +16,9 @@ jobs:
     - name: Set up KUBECONFIG environment variable
       run: |
         # Ensure KUBECONFIG is set to the appropriate file
-        export KUBECONFIG=$HOME/.kube/config
+        export KUBECONFIG=c:/users/ajayi/kubeconfig
         echo "KUBECONFIG environment variable is set to: $KUBECONFIG"
+        
 
     - name: Verify kubectl installation
       run: |
