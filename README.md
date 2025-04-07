@@ -1,26 +1,38 @@
 # kub-pod-svc
 
 
-In this Project, Grafana, Prometheus and Nginx pods are deployed with their associated NodPorts services that afford access. However, there are several prerequites that are important before the project can be completed:
+In this Project, I created and deployed Grafana, Prometheus, and Nginx pods with their associated NodePort services using Docker Desktop with Kubernetes enabled using the following steps. However, there are several prerequites that are important before the project can be completed:
+
+:
+
+1. # Pre-requisite:
+
+  1. **Set Up Docker Desktop with Kubernetes**
+
+     - Install Docker Desktop [with Kubernetes Enabled]
+     - Verify Kubernetes is running by executing `kubectl get nodes`.
+
+  2. Install and verify kubectl command line on your local machine
 
 
-# Pre-requisite:
+2. **Create YAML Files for Deployments**
 
-  1. Install Docker Desktop [with Kubernetes Enabled]
-  
-  2. Install kubectl command line on your local machine
+   - For each application (Grafana, Prometheus, and Nginx), create separate Kubernetes YAML files to   
+     define the Deployment and their associated Service resources (Kube directory)
 
+3. **Apply the YAML Files**
 
-# Implementation:
+   - Use `kubectl apply -f <filename>.yaml` for each YAML file to deploy the pods and services.
 
-   1. GitHub Actions Pipelibne workflow created for automated provisioning
+4. **Verify Deployments and Services**
 
-   2. Directory created to store the Kubernetes artifacts namely the K8S deployment YAML manifests
+   - Check the status of the pods: `kubectl get pods`.
 
-   3. A documentation of the Project is provided with README
+   - Verify the services: `kubectl get svc`.
 
+5. **Access the Applications**
 
-Key Project Outcomes:
+   - Use the NodePort values defined in the YAML files to access the applications in your browser. 
 
 - **Grafana**: Exposed on NodePort `32000`, accessible at `<NodeIP>:32000`
 
@@ -30,6 +42,16 @@ Key Project Outcomes:
 
 - **Screenshots**: Tesing of the pods and services created. 
 
+For example: 
+
+     - Grafana: `http://localhost:32000`
+
+     - Prometheus: `http://localhost:30001`
+     
+     - Nginx: `http://localhost:32001`    
+     
+
+# Overall, this setup ensures that each application is deployed as a pod and exposed via a complementary NodePort service, enabling their accessibility from your local machine.
 
 
 
