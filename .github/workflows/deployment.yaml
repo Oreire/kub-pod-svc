@@ -18,7 +18,7 @@ jobs:
         # Ensure KUBECONFIG is set to the appropriate file
         export KUBECONFIG=/home/ubuntu/kubeconfig  
         echo "KUBECONFIG environment variable is set to: $KUBECONFIG"
-        
+          
 
     - name: Verify kubectl installation
       run: |
@@ -30,6 +30,9 @@ jobs:
       run: |
         # Applying manifests to the Kubernetes cluster
         cd kube
-        kubectl apply --server= https://kubernetes.docker.internal:6443 -f nginxpod.yaml
-        kubectl apply --server= https://kubernetes.docker.internal:6443 -f prometheuspod.yaml 
-        kubectl apply --server= https://kubernetes.docker.internal:6443 -f grafanapod.yaml 
+        export KUBECONFIG=/home/ubuntu/kubeconfig  
+        kubectl config view
+        kubectl get nodes  # To verify connection
+        kubectl apply -f nginxpod.yaml
+        kubectl apply -f prometheuspod.yaml 
+        kubectl apply -f grafanapod.yaml 
