@@ -16,7 +16,7 @@ jobs:
     - name: Set up KUBECONFIG environment variable
       run: |
         # Ensure KUBECONFIG is set to the appropriate file
-        export KUBECONFIG=kubeconfig.yaml       #/home/ubuntu/kubeconfig  
+        export KUBECONFIG=/$HOME/kubeconfig  
         echo "KUBECONFIG environment variable is set to: $KUBECONFIG"
           
 
