@@ -13,11 +13,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up KUBECONFIG environment variable
-      run: |
+    #- name: Set up KUBECONFIG environment variable
+     # run: |
         # Ensure KUBECONFIG is set to the appropriate file
-        export KUBECONFIG=$HOME/.kube/config
-        echo "KUBECONFIG environment variable is set to: $KUBECONFIG"
+      #  export KUBECONFIG=$HOME/.kube/config
+       # echo "KUBECONFIG environment variable is set to: $KUBECONFIG"
+    - name: Set up kubeconfig
+      run: |
+          echo "${{ secrets.KUBECONFIG_SECRET }}" | base64 --decode > $HOME/.kube/config
+          export KUBECONFIG=$HOME/.kube/config
+      
           
 
     - name: Verify kubectl installation
