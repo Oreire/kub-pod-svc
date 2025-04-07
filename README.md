@@ -34,21 +34,21 @@ In this Project, I created and deployed Grafana, Prometheus, and Nginx pods with
 
    - Use the NodePort values defined in the YAML files to access the applications in your browser. 
 
-- **Grafana**: Exposed on NodePort `32000`, accessible at `<NodeIP>:32000`
+- **Grafana**: Exposed on NodePort `31444`, accessible at `<NodeIP>:31444`
 
-- **NGINX**: Exposed on NodePort `30001`, accessible at `<NodeIP>:30001`
+- **NGINX**: Exposed on NodePort `31502`, accessible at `<NodeIP>:31502`
 
-- **Prometheus**: Exposed on NodePort `32001`, accessible at `<NodeIP>:32001`
+- **Prometheus**: Exposed on NodePort `31693`, accessible at `<NodeIP>:31693`
 
 - **Screenshots**: Testing of the pods and services created. 
 
 For example: 
 
-     - Grafana: `http://localhost:32000`
+     - Grafana: `http://localhost:31444`
 
-     - Prometheus: `http://localhost:30001`
+     - Prometheus: `http://localhost:31502`
      
-     - Nginx: `http://localhost:32001`    
+     - Nginx: `http://localhost:31693`    
 
 
 #  Overall, this setup ensures that each application is deployed as a pod and exposed via a complementary NodePort service, enabling their accessibility from your local machine.

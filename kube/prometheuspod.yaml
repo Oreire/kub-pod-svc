@@ -21,6 +21,13 @@ spec:
         image: prom/prometheus:latest
         ports:
         - containerPort: 9090
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
 ---
 apiVersion: v1
 kind: Service
@@ -35,4 +42,4 @@ spec:
   ports:
   - port: 9090
     targetPort: 9090
-    nodePort: 32001
+    nodePort: 31502
