@@ -13,7 +13,7 @@ In this Project, I created and deployed Grafana, Prometheus, and Nginx pods with
 
     # Install kubectl command line on your local machine
 
-     - Verify kubectl installed on command line 
+     - Verify kubectl installed using 'kubectl version' command  
 
 2. **Create YAML Files for Deployments**
 
