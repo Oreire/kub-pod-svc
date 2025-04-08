@@ -20,7 +20,7 @@ jobs:
     
     - name: Set Kubeconfig
       run: |
-        export KUBECONFIG=/path/to/kubeconfig
+        export KUBECONFIG=kubeconfig.yaml
         kubectl config view
         kubectl cluster-info
       
