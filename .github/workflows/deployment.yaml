@@ -14,14 +14,10 @@ jobs:
 
     - name: Set up kubeconfig
       run: |
-        # Write the kubeconfig from the secret to a file named 'kubeconfig'
-        echo "${{ secrets.KUBECONFIG_SECRET }}" > kubeconfig
-        # Export the kubeconfig file path to an environment variable
-        export KUBECONFIG=$PWD/kubeconfig
-        # Verify the kubeconfig content
-        kubectl config view
-        kubectl cluster-info
-    
+        echo "${{ secrets.KUBECONFIG_SECRET }}" >> kubeconfig
+        export KUBECONFIG=kubeconfig
+        echo "Kubeconfig set up successfully."
+
     - name: Verify kubectl installation
       run: |
         # Check if kubectl is available
@@ -31,8 +27,9 @@ jobs:
     - name: Apply Kubernetes manifests
       run: |
         # Applying manifests to the Kubernetes cluster
+        cd kube
         kubectl config view
         kubectl get nodes  # To verify connection
-        kubectl apply -f kube/nginxpod.yaml
-        kubectl apply -f kube/prometheuspod.yaml
-        kubectl apply -f kube/grafanapod.yaml 
+        kubectl apply -f nginxpod.yaml
+        kubectl apply -f prometheuspod.yaml 
+        kubectl apply -f grafanapod.yaml 
