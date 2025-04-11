@@ -64,3 +64,21 @@ For example:
 
 
 
+
+apiVersion: v1
+kind: Config
+clusters:
+- cluster:
+    server: https://<api-server-endpoint>
+    certificate-authority-data: <base64-encoded-cert>
+  name: cluster-name
+contexts:
+- context:
+    cluster: cluster-name
+    user: user-name
+  name: context-name
+current-context: context-name
+users:
+- name: user-name
+  user:
+    token: <authentication-token>
