@@ -25,6 +25,18 @@ jobs:
         which kubectl || echo "kubectl is not installed on the runner"
         kubectl version --client || echo "Ensure kubectl is correctly configured"
 
+    - name: Debug Kubeconfig
+      run: |
+          echo "Testing kubeconfig connection..."
+          kubectl config current-context || echo "No current context found. Verify kubeconfig."
+          kubectl cluster-info || echo "Failed to connect to the cluster."
+    
+    - name: Verify Kubernetes connection
+      run: |
+        # Check if the Kubernetes cluster is reachable
+        kubectl cluster-info || echo "Failed to connect to the Kubernetes cluster"
+        kubectl get nodes || echo "Failed to get nodes from the Kubernetes cluster"
+
     - name: Apply Kubernetes manifests
       run: |
         # Applying manifests to the Kubernetes cluster
