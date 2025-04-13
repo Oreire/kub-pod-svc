@@ -53,6 +53,7 @@ For example:
 
 #  Overall, this setup ensures that each application is deployed as a pod and exposed via a complementary NodePort service, enabling their accessibility from your local machine.
 
+Updates to kubeconfig secret
 
 
 
