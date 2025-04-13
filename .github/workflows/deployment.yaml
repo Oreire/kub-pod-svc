@@ -49,14 +49,6 @@ jobs:
         kubectl cluster-info
         # Verify the kubeconfig file
           kubectl config view
-       
-    - name: Verify kubectl installation
-      shell: bash
-      # Check if kubectl is installed and configured correctly 
-      run: |
-        # Check if kubectl is available on the runner
-        which kubectl || echo "kubectl is not installed on the runner"
-        kubectl version --client || echo "Ensure kubectl is correctly configured"
 
     - name: Debug Kubeconfig
       shell: bash
