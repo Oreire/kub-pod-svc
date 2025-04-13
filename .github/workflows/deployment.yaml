@@ -91,36 +91,39 @@ jobs:
         kubectl describe pods nginx # Get details of the Nginx pod
         kubectl get events --sort-by='.metadata.creationTimestamp' # Get all events sorted by creation time
 
-
-   # - name: Expose Services
-    #  shell: bash
-     # run: |
-            # Expose Nginx, Prometheus, and Grafana pods as NodePort services
-      #      kubectl expose deploy nginx --port=80 --target-port=8080 --name=nginx-service --type=NodePort
-       #     kubectl expose deploy prometheus --port=9090 --target-port=9090 --name=prometheus-service --type=NodePort
-        #    kubectl expose deploy grafana --port=3000 --target-port=3000 --name=grafana-service --type=NodePort
-            
+ 
     - name: Expose Services
       shell: bash
       run: |
-              # Expose Nginx Service
-              if kubectl get service nginx-service; then
-                echo "Service nginx-service already exists. Skipping creation."
-              else
-                kubectl expose pod nginx --port=80 --target-port=8080 --name=nginx-service --type=NodePort
-              fi
+        # Expose Nginx Service
+        if kubectl get service nginx-service; then
+        echo "Service nginx-service already exists. Skipping creation."
+        else
+        kubectl expose pod nginx --port=80 --target-port=8080 --name=nginx-service --type=NodePort
+        fi
           
-              # Expose Prometheus Service
-              if kubectl get service prometheus-service; then
-                echo "Service prometheus-service already exists. Skipping creation."
-              else
-                kubectl expose pod prometheus --port=9090 --target-port=9090 --name=prometheus-service --type=NodePort
-              fi
+        # Expose Prometheus Service
+        if kubectl get service prometheus-service; then
+        echo "Service prometheus-service already exists. Skipping creation."
+        else
+        kubectl expose pod prometheus --port=9090 --target-port=9090 --name=prometheus-service --type=NodePort
+        fi
           
-              # Expose Grafana Service
-              if kubectl get service grafana-service; then
-                echo "Service grafana-service already exists. Skipping creation."
-              else
-                kubectl expose pod grafana --port=3000 --target-port=3000 --name=grafana-service --type=NodePort
-              fi
+        # Expose Grafana Service
+        if kubectl get service grafana-service; then
+        echo "Service grafana-service already exists. Skipping creation."
+        else
+        kubectl expose pod grafana --port=3000 --target-port=3000 --name=grafana-service --type=NodePort
+        fi
+    - name: Retrieve NodePort Details for Services
+      shell: bash
+      run: |
+        echo "Getting NodePort details for services..."
+        kubectl get services -o wide # Display all service details including NodePort
+            
+        echo "Specific details for each service:"
+        kubectl describe service nginx-service | grep 'NodePort:' # NodePort for nginx-service
+        kubectl describe service prometheus-service | grep 'NodePort:' # NodePort for prometheus-service
+        kubectl describe service grafana-service | grep 'NodePort:' # NodePort for grafana-service
+            
           
