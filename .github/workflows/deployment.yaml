@@ -72,5 +72,14 @@ jobs:
         kubectl apply -f nginxpod.yaml
         kubectl apply -f prometheuspod.yaml 
         kubectl apply -f grafanapod.yaml
+    
+    - name: Retrieve Kubernetes Service and Pod Details
+      run: |
+        # Get details of all services
+        kubectl get services -o wide
+
+        # Get details of all pods
+        kubectl get pods -o wide
+
 
         
