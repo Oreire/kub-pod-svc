@@ -72,6 +72,14 @@ jobs:
         kubectl apply -f nginxpod.yaml
         kubectl apply -f prometheuspod.yaml 
         kubectl apply -f grafanapod.yaml
+  
+    - name: Expose Services
+      shell: bash
+      run: |
+          # Expose Nginx, Prometheus, and Grafana pods as NodePort services
+          kubectl expose pod nginx --port=80 --target-port=8080 --name=nginx-service --type=NodePort
+          kubectl expose pod prometheus --port=9090 --target-port=9090 --name=prometheus-service --type=NodePort
+          kubectl expose pod grafana --port=3000 --target-port=3000 --name=grafana-service --type=NodePort
     
     - name: Retrieve Kubernetes Service and Pod Details
       shell: bash
