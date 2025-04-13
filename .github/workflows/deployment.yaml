@@ -18,11 +18,16 @@ jobs:
 
     - name: Set up kubeconfig
       run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG_SECRET }}" > $HOME/.kube/config
-          export KUBECONFIG=$HOME/.kube/config
-          kubectl config view
-          kubectl cluster-info
+            # Ensure the .kube directory exists
+            mkdir -p $HOME/.kube
+            # Copy the local kubeconfig file from the specified path to the runner's .kube directory
+            cp "c:\users\ajayi\.kube\config" $HOME/.kube/config
+            # Set the KUBECONFIG environment variable
+            export KUBECONFIG=$HOME/.kube/config
+            # Verify the kubeconfig file
+            kubectl config view
+            # Display cluster information to ensure connectivity
+            kubectl cluster-info
     #- name: Set up kubeconfig
      # run: |
       #  if [ -z "${{ secrets.KUBECONFIG_SECRET }}" ]; then
