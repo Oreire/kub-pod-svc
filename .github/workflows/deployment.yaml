@@ -17,8 +17,23 @@ jobs:
         ref: main # Specify the branch to check out
 
     - name: Set up kubeconfig
+      shell: bash
       run: |
-            # Ensure the .kube directory exists
+        # Ensure the .kube directory exists
+        mkdir -p $HOME/.kube
+        # Copy the local kubeconfig file from the specified path to the runner's .kube directory
+        cp "c:\users\ajayi\.kube\config" $HOME/.kube/config
+        # Set the KUBECONFIG environment variable
+        export KUBECONFIG=$HOME/.kube/config
+        # Verify the kubeconfig file
+        kubectl config view
+        # Display cluster information to ensure connectivity
+        kubectl cluster-info
+    - name: Set up kubeconfig
+      shell: bash
+      # Ensure the .kube directory exists
+      run: |
+            # Create the .kube directory in the user's home directory
             mkdir -p $HOME/.kube
             # Copy the local kubeconfig file from the specified path to the runner's .kube directory
             cp "c:\users\ajayi\.kube\config" $HOME/.kube/config
@@ -28,28 +43,18 @@ jobs:
             kubectl config view
             # Display cluster information to ensure connectivity
             kubectl cluster-info
-    #- name: Set up kubeconfig
-     # run: |
-      #  if [ -z "${{ secrets.KUBECONFIG_SECRET }}" ]; then
-       #   echo "Error: KUBECONFIG_SECRET is not set. Please configure the secret and try again."
-        #  exit 1
-        #fi
-        # Create the .kube directory if it doesn't exist
-        #mkdir -p $HOME/.kube
-        # Write the kubeconfig secret to a file
-        #echo "${{ secrets.KUBECONFIG_SECRET }}" > $HOME/.kube/config
-        # Export the KUBECONFIG variable so kubectl can locate the config
-        #export KUBECONFIG=$HOME/.kube/config
-        # View the kubeconfig for confirmation (sensitive data is redacted in logs)
-        #kubectl config view || echo "Failed to view kubeconfig"
-  
+      
     - name: Verify kubectl installation
+      shell: bash
+      # Check if kubectl is installed and configured correctly 
       run: |
         # Check if kubectl is available on the runner
         which kubectl || echo "kubectl is not installed on the runner"
         kubectl version --client || echo "Ensure kubectl is correctly configured"
 
     - name: Debug Kubeconfig
+      shell: bash
+      # Debug the kubeconfig file to ensure it is set up correctly
       run: |
         echo "Testing kubeconfig connection..."
         kubectl config current-context || echo "No current context found. Verify kubeconfig."
@@ -57,6 +62,8 @@ jobs:
         kubectl get nodes || echo "Failed to get nodes from the Kubernetes cluster"
 
     - name: Apply Kubernetes manifests
+      shell: bash
+      # Apply the Kubernetes manifests to deploy the pods and services
       run: |
         # Change directory to the folder containing your manifests
         cd kube
@@ -67,3 +74,6 @@ jobs:
         kubectl apply -f nginxpod.yaml
         kubectl apply -f prometheuspod.yaml 
         kubectl apply -f grafanapod.yaml
+
+        kubectl apply -f nginxsvc.yaml
+        kubectl apply -f prometheussvc.yaml
