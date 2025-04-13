@@ -7,7 +7,8 @@ jobs:
   deploy:
     # Use a self-hosted runner that is on the same network as your cluster.
     # If you instead have a publicly reachable API endpoint, you can keep ubuntu-latest.
-    runs-on: [self-hosted, Windows, X64] 
+    runs-on: [self-hosted, Windows, X64] # for example, if you are using a self-hosted runner on Windows
+    # runs-on: ubuntu-latest # if you are using a public endpoint
 
 
     steps:
