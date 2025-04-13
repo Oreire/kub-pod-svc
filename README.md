@@ -1,5 +1,5 @@
 # kub-pod-svc
-
+Deploy
 
 In this Project, I created and deployed Grafana, Prometheus, and Nginx pods with their associated NodePort services using Docker Desktop with Kubernetes enabled using the following steps. However, there are several prerequites that are important before the project can be completed:
 
