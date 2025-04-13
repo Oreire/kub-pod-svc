@@ -19,14 +19,19 @@ jobs:
     - name: Install kubectl
       shell: bash
       run: |
-          # Download kubectl
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/windows/amd64/kubectl.exe"
-          
-          # Move kubectl to a directory in PATH (e.g., C:\Windows\System32)
-          mv kubectl.exe /c/Windows/System32/kubectl.exe
-          
-          # Verify installation
-          kubectl version --client
+            # Download kubectl
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/windows/amd64/kubectl.exe"
+            
+            # Place kubectl in a user-writable directory in PATH
+            mkdir -p $HOME/bin
+            mv kubectl.exe $HOME/bin/kubectl.exe
+            
+            # Add the directory to PATH
+            echo 'export PATH=$HOME/bin:$PATH' >> $HOME/.bashrc
+            source $HOME/.bashrc
+            
+            # Verify installation
+            kubectl version --client
 
     - name: Set up kubeconfig
       shell: bash
