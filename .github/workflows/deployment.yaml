@@ -31,18 +31,21 @@ jobs:
         kubectl cluster-info
     - name: Set up kubeconfig
       shell: bash
-      # Ensure the .kube directory exists
       run: |
-            # Create the .kube directory in the user's home directory
-            mkdir -p $HOME/.kube
-            # Copy the local kubeconfig file from the specified path to the runner's .kube directory
-            cp "c:\users\ajayi\.kube\config" $HOME/.kube/config
-            # Set the KUBECONFIG environment variable
-            export KUBECONFIG=$HOME/.kube/config
-            # Verify the kubeconfig file
-            kubectl config view
-            # Display cluster information to ensure connectivity
-            kubectl cluster-info
+          # Ensure the .kube directory exists
+          mkdir -p $HOME/.kube
+          # Only copy the kubeconfig file if the source and destination are different
+          if [ "$(realpath 'c:\\users\\ajayi\\.kube\\config')" != "$(realpath $HOME/.kube/config)" ]; then
+            cp "c:\\users\\ajayi\\.kube\\config" $HOME/.kube/config
+          else
+            echo "Source and destination paths are the same. Skipping copy."
+          fi
+          # Set the KUBECONFIG environment variable
+          export KUBECONFIG=$HOME/.kube/config
+          # Verify the kubeconfig file
+          kubectl config view
+          # Display cluster information to ensure connectivity
+          kubectl cluster-info
       
     - name: Verify kubectl installation
       shell: bash
