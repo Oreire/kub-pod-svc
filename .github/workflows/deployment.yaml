@@ -74,12 +74,21 @@ jobs:
         kubectl apply -f grafanapod.yaml
     
     - name: Retrieve Kubernetes Service and Pod Details
+      shell: bash
+      # Retrieve details of all services and pods in the cluster
       run: |
         # Get details of all services
         kubectl get services -o wide
+        kubectl describe services grafana-service # Get details of the Grafana service
+        kubectl describe services prometheus-service # Get details of the Prometheus service
+        kubectl describe services nginx-service # Get details of the Nginx service  
 
         # Get details of all pods
         kubectl get pods -o wide
+        kubectl describe pods grafana # Get details of the Grafana pod
+        kubectl describe pods prometheus # Get details of the Prometheus pod 
+        kubectl describe pods nginx # Get details of the Nginx pod
+        kubectl get events --sort-by='.metadata.creationTimestamp' # Get all events sorted by creation time
 
 
         
