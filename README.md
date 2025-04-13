@@ -57,8 +57,111 @@ Updates to kubeconfig secret
 
 
 
+- name: Set up kubeconfig
+  run: |
+    mkdir -p $HOME/.kube
+    echo "${{ secrets.KUBECONFIG_SECRET }}" > $HOME/.kube/config
+    export KUBECONFIG=$HOME/.kube/config
+    kubectl config view
+    kubectl cluster-info
+
+    Self-hosted Runner
+    on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    # Use a self-hosted runner that is on the same network as your cluster.
+    # If you instead have a publicly reachable API endpoint, you can keep ubuntu-latest.
+    runs-on: [self-hosted, k8s-access]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up kubeconfig
+      run: |
+        # Create the .kube directory if it doesn't exist
+        mkdir -p $HOME/.kube
+        # Write the kubeconfig secret to a file
+        echo "${{ secrets.KUBECONFIG_SECRET }}" > $HOME/.kube/config
+        # Export the KUBECONFIG variable so kubectl can locate the config
+        export KUBECONFIG=$HOME/.kube/config
+        # View the kubeconfig for confirmation (sensitive data is redacted in logs)
+        kubectl config view || echo "Failed to view kubeconfig"
+
+    - name: Verify kubectl installation
+      run: |
+        # Check if kubectl is available on the runner
+        which kubectl || echo "kubectl is not installed on the runner"
+        kubectl version --client || echo "Ensure kubectl is correctly configured"
+
+    - name: Debug Kubeconfig
+      run: |
+        echo "Testing kubeconfig connection..."
+        kubectl config current-context || echo "No current context found. Verify kubeconfig."
+        kubectl cluster-info || echo "Failed to connect to the cluster."
+        kubectl get nodes || echo "Failed to get nodes from the Kubernetes cluster"
+
+    - name: Apply Kubernetes manifests
+      run: |
+        # Change directory to the folder containing your manifests
+        cd kube
+        # (Optional) View the current kubeconfig and cluster connection details
+        kubectl config view
+        kubectl get nodes  # to verify connectivity
+        # Apply your manifests
+        kubectl apply -f nginxpod.yaml
+        kubectl apply -f prometheuspod.yaml 
+        kubectl apply -f grafanapod.yaml
 
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up kubeconfig
+      run: |
+        
+        echo "${{ secrets.KUBECONFIG_SECRET }}" > kubeconfig
+        export KUBECONFIG=$PWD/kubeconfig
+        kubectl config view || echo "Failed to view kubeconfig"
+    
+      
+    - name: Verify kubectl installation
+      run: |
+        # Check if kubectl is available
+        which kubectl || echo "kubectl is not installed on the runner"
+        kubectl version --client || echo "Ensure kubectl is correctly configured"
+
+    - name: Debug Kubeconfig
+      run: |
+          echo "Testing kubeconfig connection..."
+          kubectl config current-context || echo "No current context found. Verify kubeconfig."
+          kubectl cluster-info || echo "Failed to connect to the cluster."
+          kubectl cluster-info || echo "Failed to connect to the Kubernetes cluster"
+          kubectl get nodes || echo "Failed to get nodes from the Kubernetes cluster"
+
+    - name: Apply Kubernetes manifests
+      run: |
+        # Applying manifests to the Kubernetes cluster
+        cd kube
+        kubectl config view
+        kubectl get nodes  # To verify connection
+        kubectl apply -f nginxpod.yaml
+        kubectl apply -f prometheuspod.yaml 
+        kubectl apply -f grafanapod.yaml 
 
 
 
