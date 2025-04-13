@@ -15,6 +15,18 @@ jobs:
       with:
         repository: Oreire/kub-pod-svc.git # Ensure the correct repository is referenced
         ref: main # Specify the branch to check out
+    
+    - name: Install kubectl
+      shell: bash
+      run: |
+          # Download kubectl
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/windows/amd64/kubectl.exe"
+          
+          # Move kubectl to a directory in PATH (e.g., C:\Windows\System32)
+          mv kubectl.exe /c/Windows/System32/kubectl.exe
+          
+          # Verify installation
+          kubectl version --client
 
     - name: Set up kubeconfig
       shell: bash
