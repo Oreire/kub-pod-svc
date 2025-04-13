@@ -17,6 +17,10 @@ jobs:
 
     - name: Set up kubeconfig
       run: |
+        if [ -z "${{ secrets.KUBECONFIG_SECRET }}" ]; then
+          echo "Error: KUBECONFIG_SECRET is not set. Please configure the secret and try again."
+          exit 1
+        fi
         # Create the .kube directory if it doesn't exist
         mkdir -p $HOME/.kube
         # Write the kubeconfig secret to a file
