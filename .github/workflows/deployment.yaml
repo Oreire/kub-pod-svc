@@ -18,19 +18,26 @@ jobs:
 
     - name: Set up kubeconfig
       run: |
-        if [ -z "${{ secrets.KUBECONFIG_SECRET }}" ]; then
-          echo "Error: KUBECONFIG_SECRET is not set. Please configure the secret and try again."
-          exit 1
-        fi
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_SECRET }}" > $HOME/.kube/config
+          export KUBECONFIG=$HOME/.kube/config
+          kubectl config view
+          kubectl cluster-info
+    #- name: Set up kubeconfig
+     # run: |
+      #  if [ -z "${{ secrets.KUBECONFIG_SECRET }}" ]; then
+       #   echo "Error: KUBECONFIG_SECRET is not set. Please configure the secret and try again."
+        #  exit 1
+        #fi
         # Create the .kube directory if it doesn't exist
-        mkdir -p $HOME/.kube
+        #mkdir -p $HOME/.kube
         # Write the kubeconfig secret to a file
-        echo "${{ secrets.KUBECONFIG_SECRET }}" > $HOME/.kube/config
+        #echo "${{ secrets.KUBECONFIG_SECRET }}" > $HOME/.kube/config
         # Export the KUBECONFIG variable so kubectl can locate the config
-        export KUBECONFIG=$HOME/.kube/config
+        #export KUBECONFIG=$HOME/.kube/config
         # View the kubeconfig for confirmation (sensitive data is redacted in logs)
-        kubectl config view || echo "Failed to view kubeconfig"
-
+        #kubectl config view || echo "Failed to view kubeconfig"
+  
     - name: Verify kubectl installation
       run: |
         # Check if kubectl is available on the runner
