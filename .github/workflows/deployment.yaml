@@ -1,4 +1,3 @@
-
 on:
   push:
     branches:
@@ -12,12 +11,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+     
     - name: Set up kubeconfig
       run: |
-        
-        echo "${{ secrets.KUBECONFIG_SECRET }}" > kubeconfig
-        export KUBECONFIG=$PWD/kubeconfig
-        kubectl config view || echo "Failed to view kubeconfig"
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_SECRET }}" > $HOME/.kube/config
+          export KUBECONFIG=$HOME/.kube/config
+          # Verify the configuration:
+          kubectl config view
+          kubectl cluster-info
 
     - name: Verify kubectl installation
       run: |
