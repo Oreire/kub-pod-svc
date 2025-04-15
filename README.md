@@ -1,6 +1,6 @@
 # kub-pod-svc
 
-# Deploying Kubernetes Infrastructure and Services Using Self Hosted Runner
+# Automated Deployment of Kubernetes Infrastructure and Services Using Self Hosted Runner
 
 In this Project, I created and deployed Grafana, Prometheus, and Nginx pods with their associated NodePort services using Docker Desktop with Kubernetes enabled using the following steps. However, there are several prerequites that are important before the project can be completed:
 
@@ -54,16 +54,16 @@ For example:
 
 #  Overall, this setup ensures that each application is deployed as a pod and exposed via a complementary NodePort service, enabling their accessibility from your local machine.
 
-# The Challenegs of Deploying  Kubernetes services and pods with Docker Desktop Using GitHub Actions to deploy.
+# The Challenegs of Deploying  Kubernetes services and pods with Docker Desktop Using GitHub Actions.
 
 ### 1. **Docker Desktop's Kubernetes Limitations**:
-   - Docker Desktop includes a lightweight Kubernetes cluster primarily for local development and testing. It is not designed for production-grade deployments, which can lead to issues such as limited scalability, lack of high availability, and restricted resource allocation.
+   - Docker Desktop includes a lightweight Kubernetes cluster primarily for local development and testing, which is not designed for production-grade deployments. Hence, limited scalability, lack of high availability, and restricted resource allocation are common inherent issues.
 
 ### 2. **Networking Challenges**:
-   - Docker Desktop's Kubernetes cluster runs within a virtualized environment, which can create networking complexities. Accessing services and pods externally may require additional configuration, such as port forwarding or exposing services via `NodePort`.
+   - Docker Desktop's Kubernetes cluster runs within a virtualized environment, which can create networking complexities. Therefore, accessing services and pods externally may require additional configuration, such as port forwarding or exposing services via `NodePort`.
 
 ### 3. **Authentication and Configuration**:
-   - GitHub Actions workflows often require access to the Kubernetes cluster via `kubeconfig`. Managing and securely storing the `kubeconfig` file or credentials can be challenging, especially when integrating with Docker Desktop's Kubernetes.
+   - GitHub Actions workflows often require access to the Kubernetes cluster via `kubeconfig`. Managing and securely storing the `kubeconfig` file or credentials can be challenging, especially when integrating with Docker Desktop's Kubernetes. The problem led to the use of self hosted runner to implemnet this project. The challenge is being taken up in an ongoing and more comprehensive K8S Project.
 
 ### 4. **Resource Constraints**:
    - Docker Desktop's Kubernetes cluster shares resources with the host machine. If the host has limited CPU or memory, it can impact the performance and stability of the cluster, especially during CI/CD pipeline execution.
@@ -78,7 +78,7 @@ For example:
    - Configuring GitHub Actions to interact with Docker Desktop's Kubernetes cluster can be complex. You need to ensure that the runner has access to the cluster, the necessary tools (like `kubectl`) are installed, and the environment is properly set up.
 
 ### Recommendations:
-- Use Docker Desktop's Kubernetes cluster for local testing and development only.
-- For production deployments, consider using a managed Kubernetes service like Azure Kubernetes Service (AKS), Google Kubernetes Engine (GKE), or Amazon Elastic Kubernetes Service (EKS).
-- If you must use Docker Desktop, ensure proper configuration of networking, authentication, and resource allocation.
+- It ia advocated that Docker Desktop's Kubernetes cluster be restricted for local testing and development only.
+- However, ensure proper configuration of networking, authentication, and resource allocation when using Docker Desktop.
+- For production deployments, using a managed Kubernetes service like Amazon Elastic Kubernetes Service (EKS), Azure Kubernetes Service (AKS) and Google Kubernetes Engine (GKE) are optimal.
 
