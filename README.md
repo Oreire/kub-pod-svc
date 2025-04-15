@@ -78,7 +78,7 @@ For example:
    - Configuring GitHub Actions to interact with Docker Desktop's Kubernetes cluster can be complex. You need to ensure that the runner has access to the cluster, the necessary tools (like `kubectl`) are installed, and the environment is properly set up.
 
 ### Recommendations:
-- It ia advocated that Docker Desktop's Kubernetes cluster be restricted for local testing and development only.
+- It is advocated that Docker Desktop's Kubernetes cluster be restricted for local testing and development only.
 - However, ensure proper configuration of networking, authentication, and resource allocation when using Docker Desktop.
 - For production deployments, using a managed Kubernetes service like Amazon Elastic Kubernetes Service (EKS), Azure Kubernetes Service (AKS) and Google Kubernetes Engine (GKE) are optimal.
 
