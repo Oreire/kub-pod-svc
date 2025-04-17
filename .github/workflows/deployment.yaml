@@ -1,4 +1,3 @@
-name: Deploy to Kubernetes
 
 on:
   push:
@@ -7,35 +6,121 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-
+    # Use a self-hosted runner that is on the same network as your cluster.
+    # If you instead have a publicly reachable API endpoint, you can keep ubuntu-latest.
+    runs-on: [self-hosted, Windows, X64] # for example, if you are using a self-hosted runner on Windows
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-
-    - name: Set up KUBECONFIG environment variable
+      with:
+        repository: Oreire/kub-pod-svc.git # Ensure the correct repository is referenced
+        ref: main # Specify the branch to check out
+    
+    - name: Install kubectl
+      shell: bash
       run: |
-        # Ensure KUBECONFIG is set to the appropriate file
-        export KUBECONFIG=/home/ubuntu/kubeconfig  
-        echo "KUBECONFIG environment variable is set to: $KUBECONFIG"
-              
-
-    - name: Verify kubectl installation
+            # Download kubectl
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/windows/amd64/kubectl.exe"
+            
+            # Place kubectl in a user-writable directory in PATH
+            mkdir -p $HOME/bin
+            mv kubectl.exe $HOME/bin/kubectl.exe
+            
+            # Add the directory to PATH
+            echo 'export PATH=$HOME/bin:$PATH' >> $HOME/.bashrc
+            source $HOME/.bashrc
+            
+            # Verify installation
+            kubectl version --client
+    - name: Set up kubeconfig
+      shell: bash
       run: |
-        # Check if kubectl is available
-        which kubectl || echo "kubectl is not installed on the runner"
-        kubectl version --client || echo "Ensure kubectl is correctly configured"
-
-    - name: Apply Kubernetes manifests
-      run: |
-        # Applying manifests to the Kubernetes cluster
-        cd kube
-        export KUBECONFIG=/home/ubuntu/kubeconfig  
+        # Ensure the .kube directory exists
+        mkdir -p $HOME/.kube
+        
+        # Set the KUBECONFIG environment variable
+        export KUBECONFIG=$HOME/.kube/config
+        
+        # Verify the kubeconfig file
         kubectl config view
-        kubectl get nodes  # To verify connection
+        
+        # Display cluster information to ensure connectivity
+        kubectl cluster-info
+        # Verify the kubeconfig file
+          kubectl config view
+    - name: Debug Kubeconfig
+      shell: bash
+      # Debug the kubeconfig file to ensure it is set up correctly
+      run: |
+        echo "Testing kubeconfig connection..."
+        kubectl config current-context || echo "No current context found. Verify kubeconfig."
+        kubectl cluster-info || echo "Failed to connect to the cluster."
+        kubectl get nodes || echo "Failed to get nodes from the Kubernetes cluster"
+    - name: Apply Kubernetes manifests
+      shell: bash
+      # Apply the Kubernetes manifests to deploy the pods and services
+      run: |
+        # Change directory to the folder containing your manifests
+        cd kube
+        # (Optional) View the current kubeconfig and cluster connection details
+        kubectl config view
+        kubectl get nodes  # to verify connectivity
+        # Apply your manifests
         kubectl apply -f nginxpod.yaml
         kubectl apply -f prometheuspod.yaml 
-        kubectl apply -f grafanapod.yaml 
+        kubectl apply -f grafanapod.yaml
+  
+        
+    - name: Retrieve Kubernetes Service and Pod Details
+      shell: bash
+      # Retrieve details of all services and pods in the cluster
+      run: |
+        # Get details of all services
+        kubectl get services -o wide
+        kubectl describe services grafana-service # Get details of the Grafana service
+        kubectl describe services prometheus-service # Get details of the Prometheus service
+        kubectl describe services nginx-service # Get details of the Nginx service  
+        # Get details of all pods
+        kubectl get pods -o wide
+        kubectl describe pods grafana # Get details of the Grafana pod
+        kubectl describe pods prometheus # Get details of the Prometheus pod 
+        kubectl describe pods nginx # Get details of the Nginx pod
+        kubectl get events --sort-by='.metadata.creationTimestamp' # Get all events sorted by creation time
+ 
+    - name: Expose Services
+      shell: bash
+      run: |
+        # Expose Nginx Service
+        if kubectl get service nginx-service; then
+        echo "Service nginx-service already exists. Skipping creation."
+        else
+        kubectl expose pod nginx --port=80 --target-port=8080 --name=nginx-service --type=NodePort
+        fi
+          
+        # Expose Prometheus Service
+        if kubectl get service prometheus-service; then
+        echo "Service prometheus-service already exists. Skipping creation."
+        else
+        kubectl expose pod prometheus --port=9090 --target-port=9090 --name=prometheus-service --type=NodePort
+        fi
+          
+        # Expose Grafana Service
+        if kubectl get service grafana-service; then
+        echo "Service grafana-service already exists. Skipping creation."
+        else
+        kubectl expose pod grafana --port=3000 --target-port=3000 --name=grafana-service --type=NodePort
+        fi
+    - name: Retrieve NodePort Details for Services
+      shell: bash
+      run: |
+        echo "Getting NodePort details for services..."
+        kubectl get services -o wide # Display all service details including NodePort
+            
+        echo "Specific details for each service:"
+        kubectl describe service nginx-service | grep 'NodePort:' # NodePort for nginx-service
+        kubectl describe service prometheus-service | grep 'NodePort:' # NodePort for prometheus-service
+        kubectl describe service grafana-service | grep 'NodePort:' # NodePort for grafana-service 
     
     - name: Port-forward Nginx service
       run: |
