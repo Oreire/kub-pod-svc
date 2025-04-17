@@ -2,7 +2,9 @@
 
 # Automated Deployment of Kubernetes Infrastructure and Services Using Self Hosted Runner
 
-In this Project, I created and deployed Grafana, Prometheus, and Nginx pods with their associated NodePort services using Docker Desktop with Kubernetes enabled using the following steps. However, there are several prerequites that are important before the project can be completed:
+**In this Project, I created and deployed Grafana, Prometheus, and Nginx pods with their associated NodePort services using Docker Desktop with Kubernetes enabled using the following steps.** The actions 
+  runner  was installed on my local machine and subeqquently configured and added to the repository on GitHub amongst other prerequites. The key steps for the im plemnetation of this CICD project are as 
+  follows:
 
 
 1.   # Pre-requisite:
