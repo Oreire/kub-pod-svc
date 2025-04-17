@@ -57,6 +57,7 @@ jobs:
         kubectl config current-context || echo "No current context found. Verify kubeconfig."
         kubectl cluster-info || echo "Failed to connect to the cluster."
         kubectl get nodes || echo "Failed to get nodes from the Kubernetes cluster"
+
     - name: Apply Kubernetes manifests
       shell: bash
       # Apply the Kubernetes manifests to deploy the pods and services
@@ -71,7 +72,15 @@ jobs:
         kubectl apply -f prometheuspod.yaml 
         kubectl apply -f grafanapod.yaml
   
-        
+    - name: Wait for pods to be ready
+      shell: bash
+      run: |
+        echo "Waiting for all pods to be ready..."
+        kubectl wait --for=condition=ready pod -l app=nginx --timeout=300s --namespace=default
+        kubectl wait --for=condition=ready pod -l app=prometheus --timeout=300s --namespace=default
+        kubectl wait --for=condition=ready pod -l app=grafana --timeout=300s --namespace=default
+        echo "All pods are ready."
+            
     - name: Retrieve Kubernetes Service and Pod Details
       shell: bash
       # Retrieve details of all services and pods in the cluster
