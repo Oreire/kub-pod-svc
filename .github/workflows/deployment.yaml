@@ -125,27 +125,28 @@ jobs:
     - name: Port-forward Nginx service
       shell: bash
       # Port-forward the Nginx service to access it locally
-      # This allows you to access the service on localhost:8081  
+      # This allows you to access the service on localhost:80
       run: |
-       # Forward Nginx service's port to access locally on port 8081
-         kubectl port-forward svc/nginx-service 8081:80 --namespace=default &
-         echo "Port-forwarding Nginx service on http://localhost:8081"
+       # Forward Nginx service's port to access locally on port 80
+         kubectl port-forward svc/nginx-service 80:80 --namespace=default &
+         echo "Port-forwarding Nginx service on http://localhost:80"
   
     - name: Port-forward Prometheus service
       shell: bash
       # Port-forward the Prometheus service to access it locally
-      # This allows you to access the service on localhost:8082
+      # This allows you to access the service on localhost:9090
       # Note: The port-forward command runs in the background, allowing the workflow to continue
       run: |
-       # Forward Prometheus service's port to access locally on port 8082
-         kubectl port-forward svc/prometheus-service 8082:9090 --namespace=default &
-         echo "Port-forwarding Prometheus service on http://localhost:8082"
+       # Forward Prometheus service's port to access locally on port 9090
+         kubectl port-forward svc/prometheus-service 9090:9090 --namespace=default &
+         echo "Port-forwarding Prometheus service on http://localhost:9090"
   
     - name: Port-forward Grafana service 
       shell: bash
       # Port-forward the Grafana service to access it locally
-      # This allows you to access the service on localhost:8083
+      # This allows you to access the service on localhost:3000
+      # Note: The port-forward command runs in the background, allowing the workflow to continue
       run: |
-       # Forward Grafana service's port to access locally on port 8083
-         kubectl port-forward svc/grafana-service 8083:3000 --namespace=default &
-         echo "Port-forwarding Grafana service on http://localhost:8083"
+       # Forward Grafana service's port to access locally on port 3000
+         kubectl port-forward svc/grafana-service 3000:3000 --namespace=default &
+         echo "Port-forwarding Grafana service on http://localhost:3000"
