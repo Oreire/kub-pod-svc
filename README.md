@@ -20,7 +20,7 @@
 
 2. **Create YAML Files for Deployments**
 
-   - For each application (Grafana, Prometheus, and Nginx), create separate Kubernetes YAML files to   
+   - For each application (Grafana, Prometheus, and Nginx), create different Kubernetes YAML files to   
      define the Deployment and their associated Service resources (Kube directory)
 
 3. **Apply the YAML Files**
